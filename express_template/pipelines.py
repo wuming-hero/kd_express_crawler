@@ -22,11 +22,9 @@ class ExpressTemplatePipeline(object):
                                           cursorclass=pymysql.cursors.DictCursor)
 
     def process_item(self, item, spider):
-        print "----------item: %s" % item
         express_name = item['express_name']
         template_list = json.loads(item['template_list'][0])
         now = self.daytime_formate(datetime.now())
-        print '==========%s=====%s========' % (express_name, now)
         try:
             with self.connection.cursor() as cursor:
                 # 插入快递公司

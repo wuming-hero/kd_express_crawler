@@ -12,11 +12,9 @@ from express_template.items import ExpressTemplateItem
 class TemplateSpider(scrapy.Spider):
     name = "template"
     allowed_domains = ["kd118.com"]
-    # start_urls = ['http://www.kd118.com/template/expresscompany']
     start_urls = ['http://www.kd118.com/']
     # 构建登录后cookies信息，以授权申请
     cookies = {}
-    cookie_str = 'ASP.NET_SessionId=m2nvrfdpayffll5zloczxxyg'
     cookie_str = 'ASP.NET_SessionId=m2nvrfdpayffll5zloczxxyg'
     cookies_array = cookie_str.split(';')
     for cookie in cookies_array:
@@ -25,8 +23,6 @@ class TemplateSpider(scrapy.Spider):
     # 可以不传
     headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36'}
-
-    # [{'name': '', 'template_list': [ {'template_name': '顺丰', 'width': 200, 'height': 140,'field_list': {}}]}]
 
     def parse(self, response):
         # print response.text
@@ -43,13 +39,10 @@ class TemplateSpider(scrapy.Spider):
         res_text = requests.post(company_url, cookies=self.cookies).text
         # print 'res_text: ', res_text
         express_list = json.loads(res_text)['message']
-        data_list = []
         for express in express_list:
             express_id = express['id']
             express_name = express['uname']
             print express_id, express_name
-            # data = {}
-            # data['name'] = express_name
             # 根据快递名字查询快递模板列表
             tmpl_list = []
             template_text = requests.post(template_url, {'ec': express_name}, cookies=self.cookies).text
@@ -85,13 +78,7 @@ class TemplateSpider(scrapy.Spider):
                     field_list.append(field)
                 tmpl['field_list'] = field_list
                 tmpl_list.append(tmpl)
-            # return self.parse_item(express_name, tmpl_list)
             yield self.parse_item(express_name, tmpl_list)
-            # data['template_list'] = tmpl_list
-            # data_list.append(data)
-            # 一个快递一个快递去处理
-
-            # print data_list
 
     def parse_item(self, express_name, tmpl_list, **kwargs):
         item = ItemLoader(item=ExpressTemplateItem())
