@@ -3,10 +3,9 @@ import json
 
 import requests
 import scrapy
-from scrapy import Selector
 from scrapy.loader import ItemLoader
 
-from express_template.items import ExpressTemplateItem
+from kd_express_crawler.items import ExpressTemplateItem
 
 
 class TemplateSpider(scrapy.Spider):
@@ -80,7 +79,7 @@ class TemplateSpider(scrapy.Spider):
                 tmpl_list.append(tmpl)
             yield self.parse_item(express_name, tmpl_list)
 
-    def parse_item(self, express_name, tmpl_list, **kwargs):
+    def parse_item(self, express_name, tmpl_list):
         item = ItemLoader(item=ExpressTemplateItem())
         # item 的value 必须是str类型的，否则放进去不报错，后面使用的时候，报KeyError
         item.add_value('express_name', express_name)

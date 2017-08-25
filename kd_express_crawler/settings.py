@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for express_template project
+# Scrapy settings for kd_express_crawler project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,16 +9,16 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'express_template'
+BOT_NAME = 'kd_express_crawler'
 
-SPIDER_MODULES = ['express_template.spiders']
-NEWSPIDER_MODULE = 'express_template.spiders'
+SPIDER_MODULES = ['kd_express_crawler.spiders']
+NEWSPIDER_MODULE = 'kd_express_crawler.spiders'
 
-ITEM_PIPELINES = {'express_template.pipelines.ExpressTemplatePipeline': 1}
+ITEM_PIPELINES = {'kd_express_crawler.pipelines.ExpressTemplatePipeline': 1}
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'express_template (+http://www.yourdomain.com)'
+#USER_AGENT = 'kd_express_crawler (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -49,13 +49,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'express_template.middlewares.ExpressTemplateSpiderMiddleware': 543,
+#    'kd_express_crawler.middlewares.ExpressTemplateSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'express_template.middlewares.MyCustomDownloaderMiddleware': 543,
+#    'kd_express_crawler.middlewares.MyCustomDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -67,7 +67,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'express_template.pipelines.ExpressTemplatePipeline': 300,
+#    'kd_express_crawler.pipelines.ExpressTemplatePipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
