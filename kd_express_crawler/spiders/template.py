@@ -9,7 +9,7 @@ from kd_express_crawler.items import ExpressTemplateItem
 
 
 class TemplateSpider(scrapy.Spider):
-    name = "template"
+    name = "express_template"
     allowed_domains = ["kd118.com"]
     start_urls = ['http://www.kd118.com/']
     # 构建登录后cookies信息，以授权申请
