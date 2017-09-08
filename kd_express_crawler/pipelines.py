@@ -58,8 +58,10 @@ class ExpressTemplatePipeline(object):
                             continue
                         # 根据fix_value 有无拆分成两个逻辑，保证正常逻辑没问题
                         if fix_value:
+                            # 固定值没有field
                             field_data = (template_id, field_name, self.get_field_type(field_name, fix_value),
-                                          field['width'], field['height'], field['left'], field['top'], fix_value, now, now)
+                                          field['width'], field['height'], field['left'], field['top'], fix_value, now,
+                                          now)
                             sql = "INSERT INTO ida_express_template_value (template_id, field_name, field_type, width, height, offset_left, offset_top, value, created_at, updated_at) VALUES (%s, %s, %s, %s, %s,%s, %s, %s, %s, %s)"
                             cursor.execute(sql, field_data)
                         else:

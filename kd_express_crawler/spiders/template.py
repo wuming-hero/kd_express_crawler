@@ -8,6 +8,7 @@ from scrapy.loader import ItemLoader
 from kd_express_crawler.items import ExpressTemplateItem
 
 
+# 爬取传统快递五联单模板配置信息
 class TemplateSpider(scrapy.Spider):
     name = "express_template"
     allowed_domains = ["kd118.com"]

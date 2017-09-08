@@ -8,7 +8,8 @@ from scrapy.loader import ItemLoader
 from kd_express_crawler.items import ExpressTemplateItem
 
 
-class TemplateSpider(scrapy.Spider):
+# 择取电子模板配置信息
+class Template2Spider(scrapy.Spider):
     name = "express_template2"
     allowed_domains = ["kd118.com"]
     start_urls = ['http://www.kd118.com/']
@@ -42,6 +43,7 @@ class TemplateSpider(scrapy.Spider):
             express_name = express['uname']
             print express_id, express_name
             if express_name == u'韵达快运':
+                # 韵达快递没有有模板，直接过滤掉
                 print '---------韵达快运----------'
                 continue
             # 根据快递名字查询快递模板列表
