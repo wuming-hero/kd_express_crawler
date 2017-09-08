@@ -9,7 +9,7 @@ from kd_express_crawler.items import ExpressTemplateItem
 
 
 class TemplateSpider(scrapy.Spider):
-    name = "express_template"
+    name = "express_template2"
     allowed_domains = ["kd118.com"]
     start_urls = ['http://www.kd118.com/']
     # 构建登录后cookies信息，以授权申请
@@ -24,15 +24,14 @@ class TemplateSpider(scrapy.Spider):
         'user-agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36'}
 
     def parse(self, response):
-        # print response.text
         # 快递公司名称URL
-        company_url = 'http://www.kd118.com/template/expresscompany'
+        company_url = 'http://www.kd118.com/template/ExpressCompany2'
         # 根据快递公司名查询模板列表URL
-        template_url = 'http://www.kd118.com/template/gettemplatelist'
+        template_url = 'http://www.kd118.com/template/GetdzmdTemplateList'
         # 模板基础信息
         setting_url = 'http://www.kd118.com/template/gettemplate'
         # 模板字段信息
-        field_url = 'http://www.kd118.com/template/gettemplatedetailnor'
+        field_url = 'http://www.kd118.com/template/GetTemplateDetailEle'
 
         # 查询快递公司列表
         res_text = requests.post(company_url, cookies=self.cookies).text
@@ -42,6 +41,9 @@ class TemplateSpider(scrapy.Spider):
             express_id = express['id']
             express_name = express['uname']
             print express_id, express_name
+            if express_name == u'韵达快运':
+                print '---------韵达快运----------'
+                continue
             # 根据快递名字查询快递模板列表
             tmpl_list = []
             template_text = requests.post(template_url, {'ec': express_name}, cookies=self.cookies).text
@@ -54,7 +56,7 @@ class TemplateSpider(scrapy.Spider):
                 setting_text = requests.post(setting_url, {'id': template_id}, cookies=self.cookies).text
                 print 'setting_text', setting_text
                 setting_json = json.loads(setting_text)['message']
-                tmpl = {'template_type': 1,  # 传统五联单
+                tmpl = {'template_type': 2,  # 电子面单
                         'template_name': template_name,
                         'image': setting_json['backPic'],
                         'width': setting_json['width'],
@@ -69,7 +71,8 @@ class TemplateSpider(scrapy.Spider):
                 field_list = []
                 for detail in detail_list:
                     field = {}
-                    field['fieldName'] = detail['fieldDisplayText']  # field 在写库前转换
+                    field['field_name'] = detail['fieldDisplayText']  # field 在写库前转换
+                    field['fix_value'] = detail['fixValue']  # 固定值，比如 '发件人：'
                     attr_list = detail['attributes'].split(',')
                     field['left'] = attr_list[0]
                     field['top'] = attr_list[1]
