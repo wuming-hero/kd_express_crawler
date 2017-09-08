@@ -76,8 +76,8 @@ class ExpressTemplatePipeline(object):
             self.connection.commit()
         except Exception, e:
             print '-------------------exception', e
-            # finally:
-            #     connection.close()
+        finally:
+            self.connection.close()
 
     def daytime_formate(self, date):
         if date is None: return ""
