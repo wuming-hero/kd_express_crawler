@@ -22,6 +22,7 @@ class ExpressTemplatePipeline(object):
                                           cursorclass=pymysql.cursors.DictCursor)
 
     def process_item(self, item, spider):
+        print '=====>>>>item: %s<<<<<======' % item
         express_name = item['express_name']
         template_list = json.loads(item['template_list'][0])
         now = self.daytime_formate(datetime.now())
@@ -57,18 +58,20 @@ class ExpressTemplatePipeline(object):
                             # 五联单的时候有这个固定条目，此处忽略
                             continue
                         # 根据fix_value 有无拆分成两个逻辑，保证正常逻辑没问题
+                        print '----templateName: %s----fieldName:%s----fixValue: %s' % (template['template_name'], field_name, fix_value)
                         if fix_value:
                             # 固定值没有field
                             field_data = (template_id, field_name, self.get_field_type(field_name, fix_value),
                                           field['width'], field['height'], field['left'], field['top'], fix_value, now,
                                           now)
+                            print '---->>>>fix value data: ', field_data
                             sql = "INSERT INTO ida_express_template_value (template_id, field_name, field_type, width, height, offset_left, offset_top, value, created_at, updated_at) VALUES (%s, %s, %s, %s, %s,%s, %s, %s, %s, %s)"
                             cursor.execute(sql, field_data)
                         else:
                             field_data = (template_id, field_name, self.get_field_key(field_name),
                                           self.get_field_type(field_name, None), field['width'], field['height'],
                                           field['left'], field['top'], now, now)
-                            # print '---->>>>field value data: ', field_data
+                            print '---->>>>field value data: ', field_data
                             sql = "INSERT INTO ida_express_template_value (template_id, field_name, field, field_type, width, height, offset_left, offset_top, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s,%s, %s, %s, %s)"
                             # print '---->>>>insert field value sql: %s' % sql
                             cursor.execute(sql, field_data)
@@ -76,8 +79,8 @@ class ExpressTemplatePipeline(object):
             self.connection.commit()
         except Exception, e:
             print '-------------------exception', e
-        finally:
-            self.connection.close()
+        # finally:
+        #     self.connection.close()
 
     def daytime_formate(self, date):
         if date is None: return ""
@@ -109,7 +112,7 @@ class ExpressTemplatePipeline(object):
             u'收件人公司': 'consigneeCompany',
             u'订单号码': 'orderNo',
             u'快递单号': 'expressNo',
-            u'快递单号条码': '快递单号条码',
+            u'快递单号条码': None,
             u'目的地城市': 'destination'}
         return field_dict[field]
 
@@ -130,4 +133,6 @@ class ExpressTemplatePipeline(object):
             field_type = 3  # 文本固定值
         elif consignee_field_type_dict.has_key(field):
             field_type = 2  # 收件人field
+        elif u'快递单号条码' == field:
+            field_type = 4  # 条形码
         return field_type

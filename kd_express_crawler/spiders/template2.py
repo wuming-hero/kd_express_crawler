@@ -90,5 +90,5 @@ class Template2Spider(scrapy.Spider):
         # item 的value 必须是str类型的，否则放进去不报错，后面使用的时候，报KeyError
         item.add_value('express_name', express_name)
         item.add_value('template_list', json.dumps(tmpl_list))
-        print '-----express_name: %s------template_list: %s' % (express_name, tmpl_list)
+        print '-----express_name: %s------template_list: %s' % (express_name, json.dumps(tmpl_list))
         return item.load_item()
