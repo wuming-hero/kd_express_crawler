@@ -106,13 +106,14 @@ class ExpressTemplatePipeline(object):
             u'收件人市': 'consigneeCity',
             u'收件人区/县': 'consigneeArea',
             u'收件人详细地址': 'consigneeAddress',
+            u'收件人乡/镇/社区': 'consigneeAddress',
             u'收件人邮编': 'consigneePostcode',
             u'收件人公司': 'consigneeCompany',
             u'订单号码': 'orderNo',
             u'快递单号': 'expressNo',
-            u'快递单号条码': None,
+            u'快递单号条码': 'expressNoBarcode',
             u'目的地城市': 'destination'}
-        return field_dict[field]
+        return field_dict[field] if field in field_dict else ''
 
     def get_field_type(self, field, fix_value):
         field_type = 1  # 发件人field
@@ -125,6 +126,7 @@ class ExpressTemplatePipeline(object):
             u'收件人市': 'consigneeCity',
             u'收件人区/县': 'consigneeArea',
             u'收件人详细地址': 'consigneeAddress',
+            u'收件人乡/镇/社区': 'consigneeAddress',
             u'收件人邮编': 'consigneePostcode',
             u'收件人公司': 'consigneeCompany'}
         if fix_value:

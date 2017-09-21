@@ -42,18 +42,24 @@ class TemplateSpider(scrapy.Spider):
         for express in express_list:
             express_id = express['id']
             express_name = express['uname']
+            # TODO 只拿模板 顺丰速运
+            # if u'顺丰速运' != express_name:
+            #     continue
             print express_id, express_name
             # 根据快递名字查询快递模板列表
             tmpl_list = []
             template_text = requests.post(template_url, {'ec': express_name}, cookies=self.cookies).text
-            print 'template_text', template_text
+            print '----express_name: %s----template_text: %s' % (express_name, template_text)
             template_list = json.loads(template_text)['message']
             for template in template_list:
                 template_id = template['id']
                 template_name = template['uname']
+                # TODO 只拿模板 顺丰2016 数据
+                # if u'顺丰2016' != template_name:
+                #     continue
                 # 根据模板ID查询模板配置信息
                 setting_text = requests.post(setting_url, {'id': template_id}, cookies=self.cookies).text
-                print 'setting_text', setting_text
+                print '----template_name: %s----setting_text: %s' % (template_name, setting_text)
                 setting_json = json.loads(setting_text)['message']
                 tmpl = {'template_type': 1,  # 传统五联单
                         'template_name': template_name,
@@ -70,7 +76,8 @@ class TemplateSpider(scrapy.Spider):
                 field_list = []
                 for detail in detail_list:
                     field = {}
-                    field['fieldName'] = detail['fieldDisplayText']  # field 在写库前转换
+                    field['field_name'] = detail['fieldDisplayText']  # field 在写库前转换
+                    field['fix_value'] = detail['fixValue']  # 固定值，比如 '发件人：'
                     attr_list = detail['attributes'].split(',')
                     field['left'] = attr_list[0]
                     field['top'] = attr_list[1]
